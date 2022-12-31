@@ -1,0 +1,11 @@
+<!DOCTYPE html><html><head>  <title>Endless Runner</title>  <style>    body {      margin: 0;      padding: 0;    }    canvas {      background-color: #eee;      display: block;      margin: 0 auto;    }  </style></head><body>  <canvas id="gameCanvas" width="600" height="400"></canvas>  <script>   
+// Set up canvas 
+const canvas = document.getElementById('gameCanvas');    const ctx = canvas.getContext('2d');    // Set up player  
+const playerWidth = 50;    const playerHeight = 50;    let playerX = canvas.width / 2 - playerWidth / 2;    let playerY = canvas.height - playerHeight;    const playerSpeed = 5;    // Set up obstacles  
+const obstacleWidth = 50;    const obstacleHeight = 50;    const obstacleGap = 150;    const obstacleDistance = 300;    let obstacles = [{      x: canvas.width,      y: 0    }];    // Set up game loop  
+let frame = 0;    const gameLoop = () => {      frame++;      // Clear canvas   
+ctx.clearRect(0, 0, canvas.width, canvas.height);      // Move player   
+playerX += playerSpeed;      if (playerX + playerWidth > canvas.width) {        playerX = canvas.width - playerWidth;      } else if (playerX < 0) {        playerX = 0;      }      // Move obstacles   
+for (let i = 0; i < obstacles.length; i++) {        obstacles[i].x -= playerSpeed;        if (obstacles[i].x + obstacleWidth < 0) {          obstacles.shift();        }      }      // Generate new obstacles  
+if (frame % obstacleDistance === 0) {        obstacles.push({          x: canvas.width,          y: Math.floor(Math.random() * (canvas.height - obstacleGap - obstacleHeight))        });      }      // Draw player     
+ctx.fillStyle = '#f00';      ctx.fillRect(playerX, playerY, playerWidth, playerHeight);      // Draw obstacles  
